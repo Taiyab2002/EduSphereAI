@@ -2,9 +2,64 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import API from "@/services/api";
 
 export default function LoginForm() {
-  const [role, setRole] = useState("student");
+  const router = useRouter();
+
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    role: "student",
+  });
+
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    setError("");
+    setMessage("");
+
+    if (!formData.email || !formData.password) {
+      setError("Please fill all fields");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const res = await API.post("/auth/login", {
+        email: formData.email,
+        password: formData.password,
+      });
+
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+
+      setMessage("Login Successful");
+
+      setTimeout(() => {
+        router.push("/");
+      }, 1500);
+    } catch (err: any) {
+      setError(err.response?.data?.message || "Login Failed");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="w-full max-w-md rounded-3xl border border-slate-800 bg-slate-900/70 backdrop-blur-xl p-8 shadow-2xl">
@@ -19,7 +74,19 @@ export default function LoginForm() {
         </p>
       </div>
 
-      <form className="space-y-6">
+      {error && (
+        <div className="mb-4 rounded-lg border border-red-500 bg-red-500/20 p-3 text-red-300">
+          {error}
+        </div>
+      )}
+
+      {message && (
+        <div className="mb-4 rounded-lg border border-green-500 bg-green-500/20 p-3 text-green-300">
+          {message}
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} className="space-y-6">
 
         <div>
           <label className="block text-slate-300 mb-2">
@@ -28,7 +95,10 @@ export default function LoginForm() {
 
           <input
             type="email"
+            name="email"
             placeholder="you@example.com"
+            value={formData.email}
+            onChange={handleChange}
             className="w-full rounded-xl bg-slate-800 border border-slate-700 px-4 py-3 outline-none focus:border-cyan-400 transition"
           />
         </div>
@@ -40,7 +110,10 @@ export default function LoginForm() {
 
           <input
             type="password"
+            name="password"
             placeholder="********"
+            value={formData.password}
+            onChange={handleChange}
             className="w-full rounded-xl bg-slate-800 border border-slate-700 px-4 py-3 outline-none focus:border-cyan-400 transition"
           />
         </div>
@@ -51,8 +124,9 @@ export default function LoginForm() {
           </label>
 
           <select
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
+            name="role"
+            value={formData.role}
+            onChange={handleChange}
             className="w-full rounded-xl bg-slate-800 border border-slate-700 px-4 py-3 outline-none focus:border-cyan-400 transition"
           >
             <option value="student">Student</option>
@@ -79,9 +153,10 @@ export default function LoginForm() {
 
         <button
           type="submit"
-          className="w-full rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-bold py-3 transition"
+          disabled={loading}
+          className="w-full rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-bold py-3 transition disabled:opacity-50"
         >
-          Login
+          {loading ? "Logging in..." : "Login"}
         </button>
 
       </form>
