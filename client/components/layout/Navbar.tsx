@@ -4,44 +4,57 @@ import Link from "next/link";
 
 export default function Navbar() {
   return (
-    <nav className="sticky top-0 z-50 backdrop-blur-md bg-slate-950/80 border-b border-slate-800">
-      <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
+    <nav className="sticky top-0 z-50 bg-slate-950/90 backdrop-blur-lg border-b border-slate-800">
+      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
 
-        <Link href="/" className="text-3xl font-bold">
-          <span className="text-white">EduSphere</span>{" "}
-          <span className="text-cyan-400">AI</span>
+        {/* Logo */}
+        <Link href="/" className="text-3xl font-black text-white">
+          EduSphere <span className="text-cyan-400">AI</span>
         </Link>
 
-        <div className="hidden md:flex items-center gap-8 text-gray-300">
-          <Link href="#" className="hover:text-cyan-400 transition">
+        {/* Navigation Links */}
+        <div className="hidden md:flex items-center gap-8 text-slate-300">
+
+          <Link
+            href="/"
+            className="hover:text-cyan-400 transition"
+          >
             Home
           </Link>
 
-          <Link href="#" className="hover:text-cyan-400 transition">
-            Courses
-          </Link>
-
-          <Link href="#" className="hover:text-cyan-400 transition">
+          <a
+            href="#features"
+            className="hover:text-cyan-400 transition"
+          >
             Features
-          </Link>
+          </a>
 
-          <Link href="#" className="hover:text-cyan-400 transition">
-            About
-          </Link>
+          <a
+            href="#courses"
+            className="hover:text-cyan-400 transition"
+          >
+            Courses
+          </a>
 
-          <Link href="#" className="hover:text-cyan-400 transition">
-            Contact
-          </Link>
         </div>
 
-        <div className="flex gap-3">
-          <button className="px-5 py-2 rounded-xl border border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-black transition">
-            Login
-          </button>
+        {/* Buttons */}
+        <div className="flex items-center gap-4">
 
-          <button className="px-5 py-2 rounded-xl bg-cyan-400 text-black font-semibold hover:bg-cyan-300 transition">
-            Register
-          </button>
+          <Link
+            href="/login"
+            className="px-5 py-2 rounded-xl border border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-black transition duration-300"
+          >
+            Login
+          </Link>
+
+          <Link
+            href="/register"
+            className="px-5 py-2 rounded-xl bg-cyan-500 text-black font-semibold hover:bg-cyan-400 transition duration-300"
+          >
+            Get Started
+          </Link>
+
         </div>
 
       </div>

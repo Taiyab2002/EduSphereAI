@@ -50,7 +50,10 @@ const features = [
 
 export default function Features() {
   return (
-    <section className="bg-slate-950 py-24">
+    <section
+      id="features"
+      className="bg-slate-950 py-24"
+    >
       <div className="max-w-7xl mx-auto px-6">
 
         <div className="text-center mb-16">

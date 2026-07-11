@@ -21,7 +21,10 @@ const courses = [
 
 export default function Courses() {
   return (
-    <section className="bg-slate-900 py-24">
+    <section
+      id="courses"
+      className="bg-slate-900 py-24"
+    >
       <div className="max-w-7xl mx-auto px-6">
 
         <div className="text-center mb-16">
