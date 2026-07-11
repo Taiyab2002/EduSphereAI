@@ -1,4 +1,7 @@
-const dns = require("dns");
+const dns = require("node:dns");
+
+// Use public DNS servers instead of router DNS
+dns.setServers(["1.1.1.1", "8.8.8.8"]);
 dns.setDefaultResultOrder("ipv4first");
 
 const mongoose = require("mongoose");
