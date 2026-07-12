@@ -4,9 +4,11 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import API from "@/services/api";
+import { useAuth } from "@/context/AuthContext";
 
 export default function LoginForm() {
   const router = useRouter();
+  const { login } = useAuth();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -46,8 +48,7 @@ export default function LoginForm() {
         password: formData.password,
       });
 
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
+      login(res.data.token, res.data.user);
 
       setMessage("Login Successful");
 

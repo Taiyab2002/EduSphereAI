@@ -57,6 +57,7 @@ export default function RegisterForm() {
         name: formData.name,
         email: formData.email,
         password: formData.password,
+        role: formData.role,
       });
 
       setMessage(res.data.message);
