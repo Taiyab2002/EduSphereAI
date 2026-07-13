@@ -4,16 +4,13 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import API from "@/services/api";
-import { useAuth } from "@/context/AuthContext";
 
 export default function LoginForm() {
   const router = useRouter();
-  const { login } = useAuth();
 
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-    role: "student",
   });
 
   const [loading, setLoading] = useState(false);
@@ -21,7 +18,7 @@ export default function LoginForm() {
   const [error, setError] = useState("");
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement>
   ) => {
     setFormData({
       ...formData,
@@ -48,7 +45,8 @@ export default function LoginForm() {
         password: formData.password,
       });
 
-      login(res.data.token, res.data.user);
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("user", JSON.stringify(res.data.user));
 
       setMessage("Login Successful");
 
@@ -117,23 +115,6 @@ export default function LoginForm() {
             onChange={handleChange}
             className="w-full rounded-xl bg-slate-800 border border-slate-700 px-4 py-3 outline-none focus:border-cyan-400 transition"
           />
-        </div>
-
-        <div>
-          <label className="block text-slate-300 mb-2">
-            Login As
-          </label>
-
-          <select
-            name="role"
-            value={formData.role}
-            onChange={handleChange}
-            className="w-full rounded-xl bg-slate-800 border border-slate-700 px-4 py-3 outline-none focus:border-cyan-400 transition"
-          >
-            <option value="student">Student</option>
-            <option value="teacher">Teacher</option>
-            <option value="admin">Admin</option>
-          </select>
         </div>
 
         <div className="flex justify-between text-sm">

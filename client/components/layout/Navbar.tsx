@@ -67,9 +67,15 @@ export default function Navbar() {
             </>
           ) : (
             <>
-              <span className="text-cyan-400 font-semibold">
-                👋 {user.name}
-              </span>
+              <div className="flex flex-col text-right">
+                <span className="text-cyan-400 font-semibold">
+                  👋 {user.name}
+                </span>
+
+                <span className="text-xs text-slate-400 capitalize">
+                  {user.role}
+                </span>
+              </div>
 
               <Link
                 href="/dashboard"
@@ -77,6 +83,15 @@ export default function Navbar() {
               >
                 Dashboard
               </Link>
+
+              {(user.role === "teacher" || user.role === "admin") && (
+                <Link
+                  href="/create-course"
+                  className="px-5 py-2 rounded-xl bg-emerald-500 text-white font-semibold hover:bg-emerald-400 transition duration-300"
+                >
+                  + Create Course
+                </Link>
+              )}
 
               <button
                 onClick={handleLogout}

@@ -1,3 +1,10 @@
+import {
+  ArrowRight,
+  CheckCircle2,
+  BookOpen,
+  Bot,
+} from "lucide-react";
+
 interface ActivityCardProps {
   title: string;
   time: string;
@@ -9,13 +16,21 @@ export default function ActivityCard({
   time,
   icon,
 }: ActivityCardProps) {
+
+  const Icon =
+    icon === "✅"
+      ? CheckCircle2
+      : icon === "📚"
+      ? BookOpen
+      : Bot;
+
   return (
-    <div className="flex items-center justify-between rounded-2xl bg-slate-900 border border-slate-800 p-5 hover:border-cyan-400 transition duration-300">
+    <div className="flex items-center justify-between rounded-2xl bg-slate-900 border border-slate-800 p-5 hover:border-cyan-400 hover:-translate-y-1 transition-all duration-300">
 
       <div className="flex items-center gap-4">
 
-        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-cyan-500/20 text-2xl">
-          {icon}
+        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-cyan-500/20">
+          <Icon className="text-cyan-400" size={24} />
         </div>
 
         <div>
@@ -30,9 +45,10 @@ export default function ActivityCard({
 
       </div>
 
-      <span className="text-cyan-400 text-xl">
-        →
-      </span>
+      <ArrowRight
+        className="text-cyan-400"
+        size={22}
+      />
 
     </div>
   );

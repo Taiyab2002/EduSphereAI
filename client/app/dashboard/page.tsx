@@ -3,9 +3,17 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
+import {
+  BookOpen,
+  TrendingUp,
+  Award,
+  Flame,
+} from "lucide-react";
+
 import { useAuth } from "@/context/AuthContext";
 import { getCourses } from "@/services/courseService";
 
+import DashboardLayout from "@/components/dashboard/layout/DashboardLayout";
 import WelcomeCard from "@/components/dashboard/WelcomeCard";
 import StatsCard from "@/components/dashboard/StatsCard";
 import CourseCard from "@/components/dashboard/CourseCard";
@@ -61,44 +69,44 @@ export default function DashboardPage() {
     );
   }
 
-  if (!user) {
-    return null;
-  }
+  if (!user) return null;
 
   return (
-    <main className="min-h-screen bg-slate-950 p-8">
-      <div className="max-w-7xl mx-auto space-y-10">
+    <DashboardLayout>
+      <div className="space-y-10">
 
         <WelcomeCard />
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+
           <StatsCard
             title="Courses"
             value={courses.length.toString()}
-            icon="📚"
+            icon={BookOpen}
             color="bg-cyan-600"
           />
 
           <StatsCard
             title="Progress"
             value="72%"
-            icon="📈"
+            icon={TrendingUp}
             color="bg-indigo-600"
           />
 
           <StatsCard
             title="Certificates"
             value="3"
-            icon="🏆"
+            icon={Award}
             color="bg-green-600"
           />
 
           <StatsCard
             title="Daily Streak"
             value="15 Days"
-            icon="🔥"
+            icon={Flame}
             color="bg-orange-600"
           />
+
         </div>
 
         <AIAssistantCard />
@@ -165,6 +173,6 @@ export default function DashboardPage() {
         </section>
 
       </div>
-    </main>
+    </DashboardLayout>
   );
 }
