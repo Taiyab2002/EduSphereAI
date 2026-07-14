@@ -26,11 +26,14 @@ interface Course {
   description: string;
   category: string;
   thumbnail: string;
+
   instructor: {
     _id: string;
     name: string;
     email: string;
   };
+
+  students: string[];
 }
 
 export default function DashboardPage() {
@@ -131,9 +134,12 @@ export default function DashboardPage() {
               {courses.map((course) => (
                 <CourseCard
                   key={course._id}
+                  courseId={course._id}
                   title={course.title}
                   instructor={course.instructor.name}
                   progress={0}
+                  role={user.role}
+                  enrolled={course.students.includes(user.id)}
                 />
               ))}
 

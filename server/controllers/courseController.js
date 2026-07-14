@@ -71,7 +71,6 @@ const enrollCourse = async (req, res) => {
       });
     }
 
-    // Only students can enroll
     if (req.user.role !== "student") {
       return res.status(403).json({
         success: false,
@@ -79,7 +78,6 @@ const enrollCourse = async (req, res) => {
       });
     }
 
-    // Already enrolled?
     const alreadyEnrolled = course.students.some(
       (studentId) => studentId.toString() === req.user.id
     );
@@ -110,8 +108,49 @@ const enrollCourse = async (req, res) => {
   }
 };
 
+// ===============================
+// Get My Courses
+// ===============================
+
+const getMyCourses = async (req, res) => {
+  try {
+    let courses = [];
+
+    if (req.user.role === "student") {
+      courses = await Course.find({
+        students: req.user.id,
+      }).populate("instructor", "name email");
+    } else if (
+      req.user.role === "teacher"
+    ) {
+      courses = await Course.find({
+        instructor: req.user.id,
+      }).populate("instructor", "name email");
+    } else if (req.user.role === "admin") {
+      courses = await Course.find().populate(
+        "instructor",
+        "name email"
+      );
+    }
+
+    res.status(200).json({
+      success: true,
+      count: courses.length,
+      courses,
+    });
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
+    });
+  }
+};
+
 module.exports = {
   createCourse,
   getCourses,
   enrollCourse,
+  getMyCourses,
 };

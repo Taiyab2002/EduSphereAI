@@ -7,15 +7,18 @@ import { useAuth } from "@/context/AuthContext";
 import {
   LayoutDashboard,
   BookOpen,
+  GraduationCap,
   PlusCircle,
   Bot,
   User,
   Settings,
+  LogOut,
 } from "lucide-react";
 
 export default function Sidebar() {
   const pathname = usePathname();
-  const { user } = useAuth();
+
+  const { user, logout } = useAuth();
 
   const menu = [
     {
@@ -25,9 +28,9 @@ export default function Sidebar() {
     },
 
     {
-      name: "Courses",
-      href: "/courses",
-      icon: BookOpen,
+      name: "My Courses",
+      href: "/my-courses",
+      icon: GraduationCap,
     },
 
     ...(user?.role === "teacher" || user?.role === "admin"
@@ -39,6 +42,12 @@ export default function Sidebar() {
           },
         ]
       : []),
+
+    {
+      name: "All Courses",
+      href: "/courses",
+      icon: BookOpen,
+    },
 
     {
       name: "AI Tutor",
@@ -82,13 +91,24 @@ export default function Sidebar() {
               }`}
             >
               <Icon size={20} />
-
               {item.name}
             </Link>
           );
         })}
 
       </nav>
+
+      <div className="mt-8 pt-6 border-t border-slate-800">
+
+        <button
+          onClick={logout}
+          className="w-full flex items-center justify-center gap-3 rounded-xl bg-red-600 hover:bg-red-500 text-white py-3 font-semibold transition"
+        >
+          <LogOut size={20} />
+          Logout
+        </button>
+
+      </div>
 
     </aside>
   );

@@ -4,6 +4,7 @@ const {
   createCourse,
   getCourses,
   enrollCourse,
+  getMyCourses,
 } = require("../controllers/courseController");
 
 const {
@@ -13,10 +14,26 @@ const {
 
 const router = express.Router();
 
-// Public
+// ===============================
+// Public Routes
+// ===============================
+
 router.get("/", getCourses);
 
+// ===============================
+// My Courses
+// ===============================
+
+router.get(
+  "/my",
+  protect,
+  getMyCourses
+);
+
+// ===============================
 // Teacher/Admin
+// ===============================
+
 router.post(
   "/",
   protect,
@@ -24,7 +41,10 @@ router.post(
   createCourse
 );
 
+// ===============================
 // Student
+// ===============================
+
 router.post(
   "/:id/enroll",
   protect,

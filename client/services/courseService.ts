@@ -1,9 +1,36 @@
 import API from "./api";
 
+// ================================
+// Get All Courses
+// ================================
+
 export const getCourses = async () => {
   const response = await API.get("/courses");
   return response.data.courses;
 };
+
+// ================================
+// Get My Courses
+// ================================
+
+export const getMyCourses = async () => {
+  const token = localStorage.getItem("token");
+
+  const response = await API.get(
+    "/courses/my",
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  return response.data.courses;
+};
+
+// ================================
+// Create Course
+// ================================
 
 export const createCourse = async (courseData: {
   title: string;

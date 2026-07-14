@@ -3,10 +3,14 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+
 import API from "@/services/api";
+import { useAuth } from "@/context/AuthContext";
 
 export default function LoginForm() {
   const router = useRouter();
+
+  const { login } = useAuth();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -26,7 +30,9 @@ export default function LoginForm() {
     });
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
     e.preventDefault();
 
     setError("");
@@ -45,16 +51,20 @@ export default function LoginForm() {
         password: formData.password,
       });
 
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
+      // ✅ Update Auth Context
+      login(res.data.token, res.data.user);
 
       setMessage("Login Successful");
 
       setTimeout(() => {
-        router.push("/");
-      }, 1500);
+        router.push("/dashboard");
+      }, 1000);
+
     } catch (err: any) {
-      setError(err.response?.data?.message || "Login Failed");
+      setError(
+        err.response?.data?.message ||
+          "Login Failed"
+      );
     } finally {
       setLoading(false);
     }
@@ -85,8 +95,10 @@ export default function LoginForm() {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-
+      <form
+        onSubmit={handleSubmit}
+        className="space-y-6"
+      >
         <div>
           <label className="block text-slate-300 mb-2">
             Email
@@ -98,7 +110,7 @@ export default function LoginForm() {
             placeholder="you@example.com"
             value={formData.email}
             onChange={handleChange}
-            className="w-full rounded-xl bg-slate-800 border border-slate-700 px-4 py-3 outline-none focus:border-cyan-400 transition"
+            className="w-full rounded-xl bg-slate-800 border border-slate-700 px-4 py-3 outline-none focus:border-cyan-400"
           />
         </div>
 
@@ -113,12 +125,11 @@ export default function LoginForm() {
             placeholder="********"
             value={formData.password}
             onChange={handleChange}
-            className="w-full rounded-xl bg-slate-800 border border-slate-700 px-4 py-3 outline-none focus:border-cyan-400 transition"
+            className="w-full rounded-xl bg-slate-800 border border-slate-700 px-4 py-3 outline-none focus:border-cyan-400"
           />
         </div>
 
         <div className="flex justify-between text-sm">
-
           <label className="flex items-center gap-2 text-slate-400">
             <input type="checkbox" />
             Remember Me
@@ -130,7 +141,6 @@ export default function LoginForm() {
           >
             Forgot Password?
           </Link>
-
         </div>
 
         <button
@@ -138,9 +148,10 @@ export default function LoginForm() {
           disabled={loading}
           className="w-full rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-bold py-3 transition disabled:opacity-50"
         >
-          {loading ? "Logging in..." : "Login"}
+          {loading
+            ? "Logging in..."
+            : "Login"}
         </button>
-
       </form>
 
       <p className="text-center text-slate-400 mt-8">
