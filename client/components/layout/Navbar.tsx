@@ -84,12 +84,12 @@ export default function Navbar() {
             Features
           </a>
 
-          <a
+          <Link
             href="#courses"
             className="hover:text-cyan-400 transition"
           >
             Courses
-          </a>
+          </Link>
 
         </div>
 
