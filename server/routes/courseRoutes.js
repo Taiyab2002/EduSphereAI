@@ -3,6 +3,7 @@ const express = require("express");
 const {
   createCourse,
   getCourses,
+  getCourseById,
   enrollCourse,
   getMyCourses,
 } = require("../controllers/courseController");
@@ -19,6 +20,8 @@ const router = express.Router();
 // ===============================
 
 router.get("/", getCourses);
+
+router.get("/:id", getCourseById);
 
 // ===============================
 // My Courses

@@ -1,5 +1,9 @@
 const Course = require("../models/Course");
 
+// ===============================
+// Create Course
+// ===============================
+
 const createCourse = async (req, res) => {
   try {
     const { title, description, category, thumbnail } = req.body;
@@ -34,6 +38,10 @@ const createCourse = async (req, res) => {
   }
 };
 
+// ===============================
+// Get All Courses
+// ===============================
+
 const getCourses = async (req, res) => {
   try {
     const courses = await Course.find().populate(
@@ -45,6 +53,37 @@ const getCourses = async (req, res) => {
       success: true,
       count: courses.length,
       courses,
+    });
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
+    });
+  }
+};
+
+// ===============================
+// Get Single Course
+// ===============================
+
+const getCourseById = async (req, res) => {
+  try {
+    const course = await Course.findById(req.params.id)
+      .populate("instructor", "name email")
+      .populate("students", "name email");
+
+    if (!course) {
+      return res.status(404).json({
+        success: false,
+        message: "Course not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      course,
     });
   } catch (error) {
     console.log(error);
@@ -120,9 +159,7 @@ const getMyCourses = async (req, res) => {
       courses = await Course.find({
         students: req.user.id,
       }).populate("instructor", "name email");
-    } else if (
-      req.user.role === "teacher"
-    ) {
+    } else if (req.user.role === "teacher") {
       courses = await Course.find({
         instructor: req.user.id,
       }).populate("instructor", "name email");
@@ -151,6 +188,7 @@ const getMyCourses = async (req, res) => {
 module.exports = {
   createCourse,
   getCourses,
+  getCourseById,
   enrollCourse,
   getMyCourses,
 };
