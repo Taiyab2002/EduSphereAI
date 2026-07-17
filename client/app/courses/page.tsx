@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 import DashboardLayout from "@/components/dashboard/layout/DashboardLayout";
-import CourseCard from "@/components/dashboard/CourseCard";
+import CourseListCard from "@/components/dashboard/CourseListCard";
 
 import { useAuth } from "@/context/AuthContext";
 import { getCourses } from "@/services/courseService";
@@ -58,11 +58,12 @@ export default function CoursesPage() {
         </div>
 
         {loading ? (
-          <p className="text-slate-400 text-lg">
+          <p className="text-lg text-slate-400">
             Loading courses...
           </p>
         ) : courses.length === 0 ? (
           <div className="rounded-3xl border border-slate-800 bg-slate-900 p-12 text-center">
+
             <h2 className="text-2xl font-bold text-white">
               No Courses Available
             </h2>
@@ -70,21 +71,19 @@ export default function CoursesPage() {
             <p className="mt-3 text-slate-400">
               No courses have been created yet.
             </p>
+
           </div>
         ) : (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
 
             {courses.map((course) => (
-              <CourseCard
+              <CourseListCard
                 key={course._id}
                 courseId={course._id}
                 title={course.title}
                 instructor={course.instructor.name}
-                progress={0}
-                role={user?.role || ""}
-                enrolled={
-                  course.students?.includes(user?._id || "") ?? false
-                }
+                category={course.category}
+                studentCount={course.students.length}
               />
             ))}
 

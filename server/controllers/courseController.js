@@ -96,7 +96,61 @@ const getCourseById = async (req, res) => {
 };
 
 // ===============================
-// Enroll in Course
+// Update Course
+// ===============================
+
+const updateCourse = async (req, res) => {
+  try {
+    console.log("===== UPDATE COURSE =====");
+console.log("User:", req.user);
+console.log("Params:", req.params);
+console.log("Body:", req.body);
+    const { title, description, category, thumbnail } = req.body;
+
+    const course = await Course.findById(req.params.id);
+
+    if (!course) {
+      return res.status(404).json({
+        success: false,
+        message: "Course not found",
+      });
+    }
+
+    // Only course owner or admin
+    if (
+      req.user.role !== "admin" &&
+      course.instructor.toString() !== req.user.id
+    ) {
+      return res.status(403).json({
+        success: false,
+        message: "You are not allowed to edit this course",
+      });
+    }
+
+    course.title = title ?? course.title;
+    course.description = description ?? course.description;
+    course.category = category ?? course.category;
+    course.thumbnail = thumbnail ?? course.thumbnail;
+
+    await course.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Course updated successfully",
+      course,
+    });
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
+    });
+  }
+};
+
+// ===============================
+// Enroll Course
 // ===============================
 
 const enrollCourse = async (req, res) => {
@@ -189,6 +243,7 @@ module.exports = {
   createCourse,
   getCourses,
   getCourseById,
+  updateCourse,
   enrollCourse,
   getMyCourses,
 };

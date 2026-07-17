@@ -4,6 +4,7 @@ const {
   createCourse,
   getCourses,
   getCourseById,
+  updateCourse,
   enrollCourse,
   getMyCourses,
 } = require("../controllers/courseController");
@@ -42,6 +43,13 @@ router.post(
   protect,
   authorize("teacher", "admin"),
   createCourse
+);
+
+router.put(
+  "/:id",
+  protect,
+  authorize("teacher", "admin"),
+  updateCourse
 );
 
 // ===============================

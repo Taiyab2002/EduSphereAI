@@ -10,20 +10,26 @@ export const getCourses = async () => {
 };
 
 // ================================
+// Get Single Course
+// ================================
+
+export const getCourseById = async (courseId: string) => {
+  const response = await API.get(`/courses/${courseId}`);
+  return response.data.course;
+};
+
+// ================================
 // Get My Courses
 // ================================
 
 export const getMyCourses = async () => {
   const token = localStorage.getItem("token");
 
-  const response = await API.get(
-    "/courses/my",
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+  const response = await API.get("/courses/my", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 
   return response.data.courses;
 };
@@ -40,8 +46,32 @@ export const createCourse = async (courseData: {
 }) => {
   const token = localStorage.getItem("token");
 
-  const response = await API.post(
-    "/courses",
+  const response = await API.post("/courses", courseData, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return response.data;
+};
+
+// ================================
+// Update Course
+// ================================
+
+export const updateCourse = async (
+  courseId: string,
+  courseData: {
+    title: string;
+    description: string;
+    category: string;
+    thumbnail: string;
+  }
+) => {
+  const token = localStorage.getItem("token");
+
+  const response = await API.put(
+    `/courses/${courseId}`,
     courseData,
     {
       headers: {
